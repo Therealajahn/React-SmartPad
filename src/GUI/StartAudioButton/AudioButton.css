@@ -1,0 +1,12 @@
+.StartAudioButton {
+  font-family: monospace, monospace;
+  width: 200px;
+  height: 60px;
+  background-color: #f20a0a;
+  box-shadow: #fff 0px 10px;
+  font-size: 30px;
+  line-height: 60px;
+  border-radius: 12px;
+  cursor: alias;
+  user-select: none;
+}
