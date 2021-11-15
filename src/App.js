@@ -1,22 +1,15 @@
 import "./App.css";
-import useMIDIAccess from "./Music Hooks/useMIDIAccess";
-import StartAudioButton from "./GUI/StartAudioButton/StartAudioButton";
-import SmartPadModel from "./GUI/SmartPadModel";
-import useRepeater from "./Music Hooks/useRepeater";
+import SmartPad from "./GUI/SmartPad";
 
 function App() {
-  const [sendMIDImessage] = useMIDIAccess();
-  sendMIDImessage(1, [144, 86, 30]);
-  // compare the usefulness of perfomance.now() and the Tone.js Sequencer
-  //for sending steady midi signals
-  // and Dom animations
+  // UI COMPONENT SmartPad houses smartpad model and hooks useSmartPad and useSmartPadInput to manipulate and recieve input from both the onscreen and physical Smartpads.
 
-  const [repeatTone, repeatNow] = useRepeater();
+  //get location of smartpad from list
   return (
     <div className="App">
       <header>{/* <StartAudioButton /> */}</header>
       <section>
-        <SmartPadModel />
+        <SmartPad />
       </section>
     </div>
   );

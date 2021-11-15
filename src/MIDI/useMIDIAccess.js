@@ -1,16 +1,30 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 
 const useMIDIAccess = () => {
   const requestMIDI = useRef(navigator.requestMIDIAccess());
 
-  useEffect(() => {
-    accessMIDIInputs();
-  }, []);
-
-  function accessMIDIInputs() {
-    return requestMIDI.current.then(function (access) {
-      return addMIDIListeners(access.inputs);
+  async function accessMIDIInputs() {
+    return requestMIDI.current
+      .then(function (access) {
+        return addMIDIListeners(access.inputs);
+      })
+      .then((result) => {
+        return result;
+      });
+  }
+  //local
+  function addMIDIListeners(map) {
+    let array = [];
+    map.forEach((item) => {
+      item.addEventListener("midimessage", function (e) {
+        // console.log(e);
+      });
+      item.addEventListener("statechange", function (e) {
+        // console.log(e);
+      });
+      array.push(item.name);
     });
+    return array;
   }
 
   function accessMIDIOutputs() {
@@ -19,20 +33,7 @@ const useMIDIAccess = () => {
     });
   }
 
-  function addMIDIListeners(map) {
-    let array = [];
-    map.forEach((item) => {
-      item.addEventListener("midimessage", function (e) {
-        console.log(e);
-      });
-      item.addEventListener("statechange", function (e) {
-        console.log(e);
-      });
-      array.push(item);
-    });
-    return array;
-  }
-
+  //useMIDIOutput
   function sendMIDIMessage(outputNumber, message) {
     accessMIDIOutputs().then((outputs) => {
       if (outputs[outputNumber]) {
@@ -42,7 +43,7 @@ const useMIDIAccess = () => {
     });
   }
 
-  return [sendMIDIMessage];
+  return [accessMIDIInputs, accessMIDIOutputs, sendMIDIMessage];
 };
 
 export default useMIDIAccess;
