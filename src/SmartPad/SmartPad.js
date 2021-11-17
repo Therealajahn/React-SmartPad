@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import useMIDIAccess from "../MIDI/useMIDIAccess";
 import useSmartPadInputs from "./Hooks/useSmartPadInput.js";
 import useSmartPadLights from "./Hooks/useSmartPadLights";
 import SmartPadModel from "./SmartPadModel";
 
 const SmartPad = (props) => {
-  //prettier-ignore
-  const [getInputs, setInputs] = useState([
-      { name: "", type: "", state: "" },
-    ]);
-  const [getOutputs, setOutputs] = useState([
-    { name: "", type: "", state: "" },
-  ]);
+  const midiInputs = useRef([{ name: "", type: "", state: "" }]);
+
+  const midiOutputs = useRef([{ name: "", type: "", state: "" }]);
+
   const [getMIDIMessage, setMIDIMessage] = useState({
     device: { name: "", type: "", state: "" },
     message: [0, 0, 0],
@@ -21,11 +18,11 @@ const SmartPad = (props) => {
     setMIDIMessage({ device: device, message: message });
   }
   function getInputsOut(inputs) {
-    setInputs(inputs);
+    midiInputs.current = inputs;
     console.log(`inputs`, inputs);
   }
   function getOutputsOut(outputs) {
-    setOutputs(outputs);
+    midiOutputs.current = outputs;
     console.log(`outputs`, outputs);
   }
 
