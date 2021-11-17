@@ -1,49 +1,86 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 
-const useMIDIAccess = () => {
+const useMIDIAccess = (send) => {
   const requestMIDI = useRef(navigator.requestMIDIAccess());
 
-  async function accessMIDIInputs() {
-    return requestMIDI.current
-      .then(function (access) {
-        return addMIDIListeners(access.inputs);
-      })
-      .then((result) => {
-        return result;
-      });
+  useEffect(() => {
+    accessMIDIInputs().then((inputs) => {
+      send.inputs(inputs);
+    });
+    accessMIDIOutputs().then((outputs) => {
+      send.outputs(outputs);
+    });
+    return () => {
+      removeMIDIListeners();
+    };
+  }, []);
+
+  ////////////////PRIVATE
+
+  //OUTPUT
+  function accessMIDIInputs() {
+    return requestMIDI.current.then((access) => {
+      return addMIDIListeners(access.inputs);
+    });
   }
-  //local
+
+  function accessMIDIOutputs() {
+    return requestMIDI.current.then((access) => {
+      return addMIDIListeners(access.outputs);
+    });
+  }
+
+  //EVENT LISTENING
+  const inputMessageHandler = useRef((event) => {
+    const item = event.target;
+    const device = { name: item.name, type: item.type, state: item.state };
+    const message = [event.data[0], event.data[1], event.data[2]];
+    send.messages(device, message);
+  });
+
+  const stateChangeHandler = useRef((event) => {
+    const item = event.port;
+    const changedDevice = {
+      name: item.name,
+      type: item.type,
+      state: item.state,
+    };
+  });
+
   function addMIDIListeners(map) {
     let array = [];
     map.forEach((item) => {
-      item.addEventListener("midimessage", function (e) {
-        // console.log(e);
-      });
-      item.addEventListener("statechange", function (e) {
-        // console.log(e);
-      });
+      item.addEventListener("midimessage", inputMessageHandler.current);
+      item.addEventListener("statechange", stateChangeHandler.current);
+      array.push({ name: item.name, type: item.type, state: item.state });
+    });
+    return array;
+  }
+
+  function removeMIDIListeners(map) {
+    let array = [];
+    map.forEach((item) => {
+      item.removeEventListener("midimessage", inputMessageHandler.current);
+      item.removeEventListener("statechange", stateChangeHandler.current);
       array.push(item.name);
     });
     return array;
   }
 
-  function accessMIDIOutputs() {
-    return requestMIDI.current.then(function (access) {
-      return addMIDIListeners(access.outputs);
-    });
-  }
+  ////////////////PUBLIC
 
-  //useMIDIOutput
   function sendMIDIMessage(outputNumber, message) {
-    accessMIDIOutputs().then((outputs) => {
-      if (outputs[outputNumber]) {
-        console.log(`MIDI out:`, outputs[outputNumber].name, message);
-        outputs[outputNumber].send(message);
+    requestMIDI.current.then((access) => {
+      let array = [];
+      for (const output of access.outputs) {
+        array.push(output);
       }
+
+      array[1][outputNumber].send(message);
     });
   }
 
-  return [accessMIDIInputs, accessMIDIOutputs, sendMIDIMessage];
+  return [sendMIDIMessage];
 };
 
 export default useMIDIAccess;
