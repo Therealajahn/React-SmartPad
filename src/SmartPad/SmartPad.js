@@ -13,6 +13,16 @@ const SmartPad = (props) => {
     device: { name: "", type: "", state: "" },
     message: [0, 0, 0],
   });
+  //shouldn't these three live in the app component? along with the midiaccess Hook? pass down as props?
+  const [getButtonColor, setButtonColor] = useState([
+    // "on", { padX: 1, padY: 8 }, "red"
+  ]);
+
+  const [sendMIDIMessage] = useMIDIAccess({
+    messages: getMIDIMessagesOut,
+    inputs: getInputsOut,
+    outputs: getOutputsOut,
+  });
 
   function getMIDIMessagesOut(device, message) {
     setMIDIMessage({ device: device, message: message });
@@ -26,19 +36,24 @@ const SmartPad = (props) => {
     console.log(`outputs`, outputs);
   }
 
-  const [sendMIDIMessage] = useMIDIAccess({
-    messages: getMIDIMessagesOut,
-    inputs: getInputsOut,
-    outputs: getOutputsOut,
+  const [sendLightCoordinates] = useSmartPadLights({
+    sendMIDIMessage: sendMIDIMessage,
   });
 
-  function sendLightCoordinates(trigger, coordinateObject, color) {
-    return [trigger, coordinateObject, color];
+  useEffect(() => {
+    sendButtonColor(["on", { padX: 5, padY: 8 }, "red"]);
+  }, []);
+
+  function sendButtonColor(buttonSignal) {
+    sendLightCoordinates(buttonSignal);
+    setButtonColor(buttonSignal);
   }
 
-  useSmartPadLights({
-    sendMIDIMessage: sendMIDIMessage,
-    sendLightCoordinates: sendLightCoordinates,
+  useSmartPadInputs({
+    getMIDIMessage: getMIDIMessage,
+    buttons: getButtonsOut,
+    modeButtons: getModeButtons,
+    encoders: getEncoders,
   });
 
   function getButtonsOut() {
@@ -53,16 +68,9 @@ const SmartPad = (props) => {
     console.log("get encoders out");
   }
 
-  useSmartPadInputs({
-    getMIDIMessage: getMIDIMessage,
-    buttons: getButtonsOut,
-    modeButtons: getModeButtons,
-    encoders: getEncoders,
-  });
-
   return (
     <div>
-      <SmartPadModel />
+      <SmartPadModel sendButton={getButtonColor} />
     </div>
   );
 };

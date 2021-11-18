@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-function SmartPadModel() {
+function SmartPadModel(props) {
   const bezelWidth = 2;
   const centerWidth = 17;
 
@@ -33,22 +33,36 @@ function SmartPadModel() {
   //////////BUTTON
   const buttonWidth = bedWidth / 8 - 0.2;
   const buttonRadius = 0.2;
+  //JSX version of button:
+  // const buttonStyle = {
+  //   width: `${buttonWidth}em`,
+  //   height: `${buttonWidth}em`,
+  //   backgroundColor: "#adaaaa",
+  //   borderRadius: `${buttonRadius}em`,
+  //   placeSelf: "center",
+  // };
+  {
+    /* <div class="button" style={buttonStyle} ref={button}></div> */
+  }
 
-  const buttonStyle = {
-    width: `${buttonWidth}em`,
-    height: `${buttonWidth}em`,
-    backgroundColor: "#adaaaa",
-    borderRadius: `${buttonRadius}em`,
-    placeSelf: "center",
-  };
   //////////BUTTON MULTIPLIER
   const buttonBed = useRef();
-  const button = useRef();
 
   useEffect(() => {
-    for (let i = 0; i < 63; i++) {
-      const copyButton = button.current.cloneNode();
-      buttonBed.current.appendChild(copyButton);
+    for (let y = 1; y <= 8; y++) {
+      for (let x = 1; x <= 8; x++) {
+        const button = document.createElement("div");
+        button.classList.add(`button`);
+        //added the 'x' and 'y' because classes that are the same will not be added, making 1 1 => 1 and 8 8 => 8
+        button.classList.add(`x${x}`);
+        button.classList.add(`y${y}`);
+        button.style.width = `${buttonWidth}em`;
+        button.style.height = `${buttonWidth}em`;
+        button.style.backgroundColor = "#adaaaa";
+        button.style.borderRadius = `${buttonRadius}em`;
+        button.style.placeSelf = "center";
+        buttonBed.current.appendChild(button);
+      }
     }
   }, []);
   //////////KNOB GRID
@@ -100,12 +114,27 @@ function SmartPadModel() {
     placeSelf: "center",
   };
 
+  useEffect(() => {
+    let padX;
+    try {
+      padX = props.sendButton[1].padX;
+    } catch (error) {
+      padX = -1;
+      console.error(error);
+    }
+    //converting an html collection to an array with spread operator
+    console.log(
+      `buttonBed`,
+      [...document.getElementsByClassName("button")].forEach((div) =>
+        console.log(div.className.split(" ")[0].split[1] === padX)
+      )
+    );
+  }, [props.sendButton]);
+
   return (
     <div className="SmartPadModel" style={{ placeSelf: "center" }}>
       <div class="base" style={baseStyle}>
-        <div class="button-bed" style={bedStyle} ref={buttonBed}>
-          <div class="button" style={buttonStyle} ref={button}></div>
-        </div>
+        <div class="button-bed" style={bedStyle} ref={buttonBed}></div>
         <div class="knob-grid" style={knobGridStyle}>
           <div class="knob" style={knobStyle}></div>
           <div class="knob" style={knobStyle}></div>
