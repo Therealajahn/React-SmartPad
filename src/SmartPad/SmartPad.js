@@ -41,7 +41,7 @@ const SmartPad = (props) => {
   });
 
   useEffect(() => {
-    sendButtonColor(["on", { padX: 5, padY: 8 }, "red"]);
+    sendButtonColor(["on", { padX: 1, padY: 2 }, "red"]);
   }, []);
 
   function sendButtonColor(buttonSignal) {

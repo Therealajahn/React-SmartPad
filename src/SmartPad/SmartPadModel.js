@@ -33,6 +33,7 @@ function SmartPadModel(props) {
   //////////BUTTON
   const buttonWidth = bedWidth / 8 - 0.2;
   const buttonRadius = 0.2;
+
   //JSX version of button:
   // const buttonStyle = {
   //   width: `${buttonWidth}em`,
@@ -114,21 +115,27 @@ function SmartPadModel(props) {
     placeSelf: "center",
   };
 
+  const firstRun = useRef(true);
   useEffect(() => {
-    let padX;
-    try {
-      padX = props.sendButton[1].padX;
-    } catch (error) {
-      padX = -1;
-      console.error(error);
+    let buttonColor;
+
+    if (props.sendButton[0] === "off") {
+      buttonColor = "#adaaaa";
+    } else {
+      buttonColor = `${props.sendButton[2]}`;
     }
-    //converting an html collection to an array with spread operator
-    console.log(
-      `buttonBed`,
-      [...document.getElementsByClassName("button")].forEach((div) =>
-        console.log(div.className.split(" ")[0].split[1] === padX)
-      )
-    );
+
+    if (!firstRun.current) {
+      const x = `x${props.sendButton[1].padX}`;
+      const y = `y${props.sendButton[1].padY}`;
+      //TODO: make this iterate over a list of lights turned on in state
+      //find the button with the correct coordinates and change its color
+      [...document.getElementsByClassName("button")].find(
+        (div) => div.classList[1] === x && div.classList[2] === y
+      ).style.backgroundColor = buttonColor;
+    } else {
+      firstRun.current = false;
+    }
   }, [props.sendButton]);
 
   return (
