@@ -1,63 +1,118 @@
 import React, { useRef, useEffect, useState } from "react";
-import useMIDIAccess from "../MIDI/useMIDIAccess";
-import useSmartPadInputs from "./Hooks/useSmartPadInput.js";
+import useSmartPadInputs from "./Hooks/useSmartPadInputs";
 import useSmartPadLights from "./Hooks/useSmartPadLights";
 import SmartPadModel from "./SmartPadModel";
 
 const SmartPad = (props) => {
-  const midiInputs = useRef([{ name: "", type: "", state: "" }]);
-
-  const midiOutputs = useRef([{ name: "", type: "", state: "" }]);
-
-  const [getMIDIMessage, setMIDIMessage] = useState({
-    device: { name: "", type: "", state: "" },
-    message: [0, 0, 0],
-  });
-  //shouldn't these three live in the app component? along with the midiaccess Hook? pass down as props?
   const [getButtonColor, setButtonColor] = useState([
     // "on", { padX: 1, padY: 8 }, "red"
   ]);
 
-  const [sendMIDIMessage] = useMIDIAccess({
-    messages: getMIDIMessagesOut,
-    inputs: getInputsOut,
-    outputs: getOutputsOut,
-  });
-
-  function getMIDIMessagesOut(device, message) {
-    setMIDIMessage({ device: device, message: message });
-  }
-  function getInputsOut(inputs) {
-    midiInputs.current = inputs;
-    console.log(`inputs`, inputs);
-  }
-  function getOutputsOut(outputs) {
-    midiOutputs.current = outputs;
-    console.log(`outputs`, outputs);
-  }
+  const sendMIDIMessage = props.sendMIDIMessage;
+  const getSequence = props.getSequence + 1;
 
   const [sendLightCoordinates] = useSmartPadLights({
     sendMIDIMessage: sendMIDIMessage,
   });
 
-  useEffect(() => {
-    sendButtonColor(["on", { padX: 1, padY: 2 }, "red"]);
-  }, []);
-
-  function sendButtonColor(buttonSignal) {
-    sendLightCoordinates(buttonSignal);
-    setButtonColor(buttonSignal);
-  }
+  const [getTriggers, setTriggers] = useState([]);
+  const triggerToggle = useRef(false);
 
   useSmartPadInputs({
-    getMIDIMessage: getMIDIMessage,
+    getMIDIMessage: props.getMIDIMessage,
     buttons: getButtonsOut,
     modeButtons: getModeButtons,
     encoders: getEncoders,
   });
 
-  function getButtonsOut() {
-    console.log("buttons out");
+  function getButtonsOut(isOn, coordinates) {
+    // console.log("buttons out", coordinates);
+    // console.log(`getTriggers`, getTriggers);
+
+    setTriggers((triggers) => {
+      // console.log(`triggers`, triggers);
+      const isTriggerInList = () => {
+        const repeatTrigger = triggers.filter(
+          (trigger) => JSON.stringify(trigger) === JSON.stringify(coordinates)
+        );
+        if (repeatTrigger.length > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      };
+
+      const deleteTrigger = () => {
+        return triggers.filter(
+          (trigger) => JSON.stringify(trigger) !== JSON.stringify(coordinates)
+        );
+      };
+
+      if (isOn && triggers && isTriggerInList()) {
+        // console.log(`delete trigger`);
+        return deleteTrigger();
+      } else if (isOn && triggers) {
+        // console.log("add new trigger");
+
+        return [...triggers, { ...coordinates }];
+      } else if (isOn && !triggers) {
+        // console.log("init triggers");
+        return [{ ...coordinates }];
+      }
+      // console.log("keep triggers the same");
+      return [...triggers];
+    });
+  }
+
+  function sendButtonColor(buttonSignal) {
+    sendLightCoordinates(buttonSignal);
+    // setButtonColor(buttonSignal);
+  }
+
+  useEffect(() => {
+    applyPadModel();
+  }, [getSequence, getTriggers]);
+
+  function applyPadModel() {
+    function applyTriggers() {
+      console.log(`getTriggers`, getTriggers);
+      if (getTriggers) {
+        getTriggers.forEach((coordinates) => {
+          // console.log(`{...coordinates}`, { ...coordinates });
+          sendButtonColor(["on", { ...coordinates }, "white"]);
+        });
+      }
+    }
+    applyTriggers();
+    function applySequence() {
+      sendButtonColor(["on", { padX: getSequence, padY: 1 }, "blue"]);
+      sendButtonColor(["on", { padX: getSequence, padY: 2 }, "blue"]);
+      sendButtonColor(["on", { padX: getSequence, padY: 3 }, "blue"]);
+      sendButtonColor(["on", { padX: getSequence, padY: 4 }, "blue"]);
+      sendButtonColor(["on", { padX: getSequence, padY: 5 }, "blue"]);
+      sendButtonColor(["on", { padX: getSequence, padY: 6 }, "blue"]);
+      sendButtonColor(["on", { padX: getSequence, padY: 7 }, "blue"]);
+      sendButtonColor(["on", { padX: getSequence, padY: 8 }, "blue"]);
+    }
+    applySequence();
+
+    let cleanupSequence = getSequence - 1;
+
+    if (getSequence === 1) {
+      cleanupSequence = 8;
+    }
+
+    function removePastSequence() {
+      sendButtonColor(["off", { padX: cleanupSequence, padY: 1 }, "blue"]);
+      sendButtonColor(["off", { padX: cleanupSequence, padY: 2 }, "blue"]);
+      sendButtonColor(["off", { padX: cleanupSequence, padY: 3 }, "blue"]);
+      sendButtonColor(["off", { padX: cleanupSequence, padY: 4 }, "blue"]);
+      sendButtonColor(["off", { padX: cleanupSequence, padY: 5 }, "blue"]);
+      sendButtonColor(["off", { padX: cleanupSequence, padY: 6 }, "blue"]);
+      sendButtonColor(["off", { padX: cleanupSequence, padY: 7 }, "blue"]);
+      sendButtonColor(["off", { padX: cleanupSequence, padY: 8 }, "blue"]);
+    }
+    removePastSequence();
   }
 
   function getModeButtons() {

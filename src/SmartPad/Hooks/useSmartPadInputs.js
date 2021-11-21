@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from "react";
 const useSmartPadInputs = (send) => {
   const { getMIDIMessage } = send;
 
-  const getButtonCoordinates = useRef((buttonNumber) => {
+  const getButtonCoordinates = useRef((buttonType, buttonNumber) => {
     let padY = 0;
     let xMin = 0;
 
@@ -35,7 +35,15 @@ const useSmartPadInputs = (send) => {
 
     let padX = buttonNumber - xMin + 1;
 
-    send.buttons({ padX: padX, padY: padY });
+    let isOn;
+
+    if (buttonType === 144) {
+      isOn = true;
+    } else if (buttonType === 128) {
+      isOn = false;
+    }
+
+    send.buttons(isOn, { padX: padX, padY: padY });
   });
 
   const getModeButton = useRef((modeButton) => {
@@ -59,8 +67,10 @@ const useSmartPadInputs = (send) => {
   });
 
   useEffect(() => {
-    console.log(getMIDIMessage.device.name, getMIDIMessage.message);
-    routeInput();
+    // console.log(getMIDIMessage.device.name, getMIDIMessage.message);
+    if (getMIDIMessage.device.name === "SmartPAD MIDI 1") {
+      routeInput();
+    }
   }, [getMIDIMessage]);
 
   function routeInput() {
@@ -68,10 +78,16 @@ const useSmartPadInputs = (send) => {
       //PAD BUTTONS SEND:[(144:on 128:off),(*see reference),((0:on 127:off))]
       switch (getMIDIMessage.message[0]) {
         case 144:
-          getButtonCoordinates.current(getMIDIMessage.message[1]);
+          getButtonCoordinates.current(
+            getMIDIMessage.message[0],
+            getMIDIMessage.message[1]
+          );
           break;
         case 128:
-          getButtonCoordinates.current(getMIDIMessage.message[1]);
+          getButtonCoordinates.current(
+            getMIDIMessage.message[0],
+            getMIDIMessage.message[1]
+          );
           break;
 
         //MODE BUTTONS SEND: [(159:on 143:off),(112-119),(0:on 127:off)]

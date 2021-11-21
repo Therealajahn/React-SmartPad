@@ -35,7 +35,6 @@ const useSmartPadLights = (send) => {
       7: 6,
       8: 7,
     };
-
     const buttonId = convertX[coordinates.padX] + convertY[coordinates.padY];
 
     const padColors = {

@@ -31,22 +31,6 @@ const useMIDIAccess = (send) => {
   }
 
   //EVENT LISTENING
-  const inputMessageHandler = useRef((event) => {
-    const item = event.target;
-    const device = { name: item.name, type: item.type, state: item.state };
-    const message = [event.data[0], event.data[1], event.data[2]];
-    send.messages(device, message);
-  });
-
-  const stateChangeHandler = useRef((event) => {
-    const item = event.port;
-    const changedDevice = {
-      name: item.name,
-      type: item.type,
-      state: item.state,
-    };
-  });
-
   function addMIDIListeners(map) {
     let array = [];
     map.forEach((item) => {
@@ -66,6 +50,22 @@ const useMIDIAccess = (send) => {
     });
     return array;
   }
+
+  const inputMessageHandler = useRef((event) => {
+    const item = event.target;
+    const device = { name: item.name, type: item.type, state: item.state };
+    const message = [event.data[0], event.data[1], event.data[2]];
+    send.messages(device, message);
+  });
+
+  const stateChangeHandler = useRef((event) => {
+    const item = event.port;
+    const changedDevice = {
+      name: item.name,
+      type: item.type,
+      state: item.state,
+    };
+  });
 
   ////////////////PUBLIC
 

@@ -49,6 +49,7 @@ function SmartPadModel(props) {
   //////////BUTTON MULTIPLIER
   const buttonBed = useRef();
 
+  ///DECLARATIVE BAD!!!!!!
   useEffect(() => {
     for (let y = 1; y <= 8; y++) {
       for (let x = 1; x <= 8; x++) {
@@ -66,6 +67,32 @@ function SmartPadModel(props) {
       }
     }
   }, []);
+
+  const firstRun = useRef(true);
+
+  useEffect(() => {
+    let buttonColor;
+
+    if (props.sendButton[0] === "off") {
+      buttonColor = "#adaaaa";
+    } else {
+      buttonColor = `${props.sendButton[2]}`;
+    }
+
+    if (!firstRun.current) {
+      const x = `x${props.sendButton[1].padX}`;
+      const y = `y${props.sendButton[1].padY}`;
+      //TODO: make this iterate over a list of lights turned on in state
+      //find the button with the correct coordinates and change its color
+      [...document.getElementsByClassName("button")].find(
+        (div) => div.classList[1] === x && div.classList[2] === y
+      ).style.backgroundColor = buttonColor;
+    } else {
+      firstRun.current = false;
+    }
+  }, [props.sendButton]);
+  ///DECLARATIVE BAD!!!!!!
+
   //////////KNOB GRID
   const knobGridWidth = bedWidth;
   //find the space in between the bezel and the button bed
@@ -114,29 +141,6 @@ function SmartPadModel(props) {
     backgroundColor: "#545454",
     placeSelf: "center",
   };
-
-  const firstRun = useRef(true);
-  useEffect(() => {
-    let buttonColor;
-
-    if (props.sendButton[0] === "off") {
-      buttonColor = "#adaaaa";
-    } else {
-      buttonColor = `${props.sendButton[2]}`;
-    }
-
-    if (!firstRun.current) {
-      const x = `x${props.sendButton[1].padX}`;
-      const y = `y${props.sendButton[1].padY}`;
-      //TODO: make this iterate over a list of lights turned on in state
-      //find the button with the correct coordinates and change its color
-      [...document.getElementsByClassName("button")].find(
-        (div) => div.classList[1] === x && div.classList[2] === y
-      ).style.backgroundColor = buttonColor;
-    } else {
-      firstRun.current = false;
-    }
-  }, [props.sendButton]);
 
   return (
     <div className="SmartPadModel" style={{ placeSelf: "center" }}>
