@@ -75,7 +75,7 @@ const SmartPad = (props) => {
 
   function applyPadModel() {
     function applyTriggers() {
-      console.log(`getTriggers`, getTriggers);
+      // console.log(`getTriggers`, getTriggers);
       if (getTriggers) {
         getTriggers.forEach((coordinates) => {
           // console.log(`{...coordinates}`, { ...coordinates });
