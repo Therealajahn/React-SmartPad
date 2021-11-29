@@ -3,8 +3,10 @@ import "./App.css";
 import SmartPad from "./SmartPad/SmartPad";
 import useMIDIAccess from "./MIDI/useMIDIAccess";
 import usePureData from "./MIDI/usePuredata";
+import useRepeater from "./Sequencing/useRepeater";
 
 function App() {
+  ////////////////MIDI STATE
   const midiInputs = useRef([{ name: "", type: "", state: "" }]);
 
   const midiOutputs = useRef([{ name: "", type: "", state: "" }]);
@@ -13,7 +15,7 @@ function App() {
     device: { name: "", type: "", state: "" },
     message: [0, 0, 0],
   });
-
+  /////////////MIDI Access
   const [sendMIDIMessage] = useMIDIAccess({
     messages: getMIDIMessagesOut,
     inputs: getInputsOut,
@@ -31,19 +33,26 @@ function App() {
     midiOutputs.current = outputs;
     // console.log(`outputs`, outputs);
   }
-
+  //////////////REPEATER
   const [getSequence, setSequence] = useState(0);
 
-  usePureData({
+  useRepeater({
     sendMIDIMessage: sendMIDIMessage,
     getMIDIMessage: getMIDIMessage,
-    midiInputs: midiInputs.current,
     advanceSequence: advanceSequence,
   });
 
   function advanceSequence() {
     setSequence((sequenceCount) => (sequenceCount += 1) % 8);
   }
+  //////////////PUREDATA
+
+  // usePureData({
+  //   sendMIDIMessage: sendMIDIMessage,
+  //   getMIDIMessage: getMIDIMessage,
+  //   midiInputs: midiInputs.current,
+  //   advanceSequence: advanceSequence,
+  // });
 
   return (
     <div className="App">

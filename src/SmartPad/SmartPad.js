@@ -1,22 +1,54 @@
 import React, { useRef, useEffect, useState } from "react";
 import usePadStore from "./Hooks/usePadStore";
+import useInputFilter from "./Hooks/useInputFilter";
+import useOutputFilter from "./Hooks/useOutputFilter";
 import useSmartPadInputs from "./Hooks/useSmartPadInputs";
 import useSmartPadLights from "./Hooks/useSmartPadLights";
 import SmartPadModel from "./SmartPadModel";
 
 const SmartPad = (props) => {
-  const [getButtonColor, setButtonColor] = useState([
-    // "on", { padX: 1, padY: 8 }, "red"
-  ]);
-
-  /////////////Functions From Props
   const sendMIDIMessage = props.sendMIDIMessage;
   const getSequence = props.getSequence + 1;
 
+  /////////////////SMART PAD LIGHTS
   const [sendLightCoordinates] = useSmartPadLights({
     sendMIDIMessage: sendMIDIMessage,
   });
 
+  ///////////////PAD STORE
+  const [getPadStore, setPadStore] = useState();
+
+  const [updateButton] = usePadStore({
+    setPadStore: setPadStore,
+  });
+
+  ////////////////INPUT FILTER
+  const [buttonPressed] = useInputFilter({
+    changeMode: changeMode,
+    updateButton: updateButton,
+  });
+
+  function changeMode() {
+    return "normal";
+  }
+  ////////////////OUTPUT FILTER
+  const [getButtonColor, setButtonColor] = useState([]);
+  //[trigger, col, row, color]
+
+  useOutputFilter({
+    changeMode: changeMode,
+    getPadStore: getPadStore,
+    sendLightCoordinates: sendLightCoordinates,
+    setButtonColor: setButtonColor,
+  });
+
+  /////////////////PLAYHEAD
+  //usePlayhead takes in getSequence prop and modifies Pad State
+  //should this live in the output filter?
+  //I am going to need this to change based on what mode I'm in
+  //I can just send it a mode change
+
+  /////////////////SMART PAD INPUTS
   useSmartPadInputs({
     getMIDIMessage: props.getMIDIMessage,
     buttons: getButtonsOut,
@@ -25,35 +57,8 @@ const SmartPad = (props) => {
   });
 
   function getButtonsOut(isOn, coordinates) {
-    console.log("buttons out", isOn, coordinates);
-    const { padX, padY } = coordinates;
-    //apply button for toggles
-    if (isOn) {
-      updateStore(padX, padY, "trigger", true);
-    }
-    //apply button to SmartPad state
-  }
-
-  function sendButtonColor(buttonSignal) {
-    sendLightCoordinates(buttonSignal);
-    // setButtonColor(buttonSignal);
-  }
-
-  const [updateStore] = usePadStore({
-    returnStore: returnStore,
-  });
-
-  function returnStore(getPadStore) {
-    console.log("pad store:", getPadStore);
-    return getPadStore;
-  }
-
-  useEffect(() => {
-    applyPadModel();
-  }, [getSequence]);
-
-  function applyPadModel() {
-    //loop over smartPad state apply the triggers with sendButtonColor
+    // console.log("buttons out", isOn, coordinates);
+    buttonPressed(isOn, coordinates);
   }
 
   function getModeButtons() {
@@ -66,7 +71,7 @@ const SmartPad = (props) => {
 
   return (
     <div>
-      <SmartPadModel sendButton={getButtonColor} />
+      <SmartPadModel getButtonColor={getButtonColor} />
     </div>
   );
 };

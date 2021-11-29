@@ -2,11 +2,8 @@ import React, { useRef, useEffect, useState } from "react";
 
 const useSmartPadLights = (send) => {
   const { sendMIDIMessage } = send;
-  useEffect(() => {
-    // sendLightCoordinates(["on", { padX: 1, padY: 8 }, "red"]);
-  }, []);
 
-  function sendLightCoordinates([trigger, coordinates, color]) {
+  function sendLightCoordinates(trigger, col, row, color) {
     let lightSwitch = 144;
     //144 for on 128 for off
     if (trigger === "on") {
@@ -35,7 +32,7 @@ const useSmartPadLights = (send) => {
       7: 6,
       8: 7,
     };
-    const buttonId = convertX[coordinates.padX] + convertY[coordinates.padY];
+    const buttonId = convertX[col] + convertY[row];
 
     const padColors = {
       black: 0,
@@ -49,7 +46,9 @@ const useSmartPadLights = (send) => {
 
     const lightColor = padColors[color];
 
-    sendMIDIMessage(1, [lightSwitch, buttonId, lightColor]);
+    // console.log("lights args", arguments);
+
+    sendMIDIMessage(2, [lightSwitch, buttonId, lightColor]);
   }
   return [sendLightCoordinates];
 };

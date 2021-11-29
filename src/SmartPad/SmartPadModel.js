@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 function SmartPadModel(props) {
   const bezelWidth = 2;
@@ -34,7 +34,6 @@ function SmartPadModel(props) {
   const buttonWidth = bedWidth / 8 - 0.2;
   const buttonRadius = 0.2;
 
-  //JSX version of button:
   // const buttonStyle = {
   //   width: `${buttonWidth}em`,
   //   height: `${buttonWidth}em`,
@@ -42,56 +41,69 @@ function SmartPadModel(props) {
   //   borderRadius: `${buttonRadius}em`,
   //   placeSelf: "center",
   // };
+
   {
     /* <div class="button" style={buttonStyle} ref={button}></div> */
   }
 
   //////////BUTTON MULTIPLIER
-  const buttonBed = useRef();
+  // const buttonBed = useRef();
 
-  ///DECLARATIVE BAD!!!!!!
-  useEffect(() => {
-    for (let y = 1; y <= 8; y++) {
-      for (let x = 1; x <= 8; x++) {
-        const button = document.createElement("div");
-        button.classList.add(`button`);
-        //added the 'x' and 'y' because classes that are the same will not be added, making 1 1 => 1 and 8 8 => 8
-        button.classList.add(`x${x}`);
-        button.classList.add(`y${y}`);
-        button.style.width = `${buttonWidth}em`;
-        button.style.height = `${buttonWidth}em`;
-        button.style.backgroundColor = "#adaaaa";
-        button.style.borderRadius = `${buttonRadius}em`;
-        button.style.placeSelf = "center";
-        buttonBed.current.appendChild(button);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   for (let y = 1; y <= 8; y++) {
+  //     for (let x = 1; x <= 8; x++) {
+  //       const button = document.createElement("div");
+  //       button.classList.add(`button`);
+  //       //added the 'x' and 'y' because classes that are the same will not be added, making 1 1 => 1 and 8 8 => 8
+  //       button.classList.add(`x${x}`);
+  //       button.classList.add(`y${y}`);
+  //       button.style.width = `${buttonWidth}em`;
+  //       button.style.height = `${buttonWidth}em`;
+  //       button.style.backgroundColor = "#adaaaa";
+  //       button.style.borderRadius = `${buttonRadius}em`;
+  //       button.style.placeSelf = "center";
+  //       buttonBed.current.appendChild(button);
+  //     }
+  //   }
+  // }, []);
 
-  const firstRun = useRef(true);
+  // const firstRun = useRef(true);
+  // ////////////CHANGE BUTTON COLOR
 
-  useEffect(() => {
-    let buttonColor;
+  // useEffect(() => {
+  //   console.log(`props.getButtonColor`, props.getButtonColor);
+  //   props.getButtonColor.forEach((button) => {
+  //     console.log(`pad model button`, button);
+  //     const [trigger, col, row, color] = button;
+  //     let buttonColor = "";
+  //     if (trigger === "off") {
+  //       buttonColor = "#adaaaa";
+  //     } else {
+  //       buttonColor = `${color}`;
+  //     }
 
-    if (props.sendButton[0] === "off") {
-      buttonColor = "#adaaaa";
-    } else {
-      buttonColor = `${props.sendButton[2]}`;
-    }
+  //     const x = `x${col}`;
+  //     const y = `y${row}`;
+  //     console.log(`x, y`, x, y);
 
-    if (!firstRun.current) {
-      const x = `x${props.sendButton[1].padX}`;
-      const y = `y${props.sendButton[1].padY}`;
-      //TODO: make this iterate over a list of lights turned on in state
-      //find the button with the correct coordinates and change its color
-      [...document.getElementsByClassName("button")].find(
-        (div) => div.classList[1] === x && div.classList[2] === y
-      ).style.backgroundColor = buttonColor;
-    } else {
-      firstRun.current = false;
-    }
-  }, [props.sendButton]);
-  ///DECLARATIVE BAD!!!!!!
+  //     let buttonMatch = [...document.getElementsByClassName("button")].find(
+  //       (div) => div.classList[1] === x && div.classList[2] === y
+  //     );
+
+  //     console.log(`buttonMatch`, buttonMatch);
+
+  //     if (!firstRun.current) {
+  //       // console.log(`[...document.getElementsByClassName("button")]`, [
+  //       //   ...document.getElementsByClassName("button"),
+  //       // ]);
+  //       // [...document.getElementsByClassName("button")].find(
+  //       //   (div) => div.classList[1] === x && div.classList[2] === y
+  //       // ).style.backgroundColor = buttonColor;
+  //     } else {
+  //       firstRun.current = false;
+  //     }
+  //   });
+  // }, [props.getButtonColor]);
 
   //////////KNOB GRID
   const knobGridWidth = bedWidth;

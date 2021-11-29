@@ -75,8 +75,7 @@ const useMIDIAccess = (send) => {
       for (const output of access.outputs) {
         array.push(output);
       }
-
-      array[1][outputNumber].send(message);
+      array[outputNumber][1].send(message);
     });
   }
 

@@ -1,0 +1,50 @@
+Date : 2021-11-28 01:10:36
+Directory : /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src
+Total : 19 files,  712 codes, 79 comments, 125 blanks, all 916 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JavaScript |         16 |        679 |         79 |        119 |        877 |
+| CSS        |          3 |         33 |          0 |          6 |         39 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                         | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                            |         19 |        712 |         79 |        125 |        916 |
+| GUI                                                                                                          |          2 |         30 |          5 |          5 |         40 |
+| GUI/StartAudioButton                                                                                         |          2 |         30 |          5 |          5 |         40 |
+| MIDI                                                                                                         |          2 |         86 |          8 |         17 |        111 |
+| Sequencing                                                                                                   |          1 |         27 |          6 |          5 |         38 |
+| SmartPad                                                                                                     |          7 |        467 |         41 |         75 |        583 |
+| SmartPad/Hooks                                                                                               |          5 |        283 |         11 |         39 |        333 |
++--------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                     | language   | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/App.css                                  | CSS        |         14 |          0 |          3 |         17 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/App.js                                   | JavaScript |         49 |         12 |         10 |         71 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/App.test.js                              | JavaScript |          7 |          0 |          2 |          9 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/GUI/StartAudioButton/AudioButton.css     | CSS        |         12 |          0 |          1 |         13 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/GUI/StartAudioButton/StartAudioButton.js | JavaScript |         18 |          5 |          4 |         27 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/MIDI/useMIDIAccess.js                    | JavaScript |         68 |          4 |         14 |         86 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/MIDI/usePuredata.js                      | JavaScript |         18 |          4 |          3 |         25 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/Sequencing/useRepeater.js                | JavaScript |         27 |          6 |          5 |         38 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/SmartPad/Hooks/useInputFilter.js         | JavaScript |         16 |          0 |          4 |         20 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/SmartPad/Hooks/useOutputFilter.js        | JavaScript |         21 |          1 |          3 |         25 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/SmartPad/Hooks/usePadStore.js            | JavaScript |        105 |          1 |          8 |        114 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/SmartPad/Hooks/useSmartPadInputs.js      | JavaScript |         93 |          7 |         16 |        116 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/SmartPad/Hooks/useSmartPadLights.js      | JavaScript |         48 |          2 |          8 |         58 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/SmartPad/SmartPad.js                     | JavaScript |         53 |          7 |         15 |         75 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/SmartPad/SmartPadModel.js                | JavaScript |        131 |         23 |         21 |        175 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/index.css                                | CSS        |          7 |          0 |          2 |          9 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/index.js                                 | JavaScript |         12 |          3 |          3 |         18 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/reportWebVitals.js                       | JavaScript |         12 |          0 |          2 |         14 |
+| /home/ajahnkimble/Documents/1-Pri/React-SmartPad/smartpad-react/src/setupTests.js                            | JavaScript |          1 |          4 |          1 |          6 |
+| Total                                                                                                        |            |        712 |         79 |        125 |        916 |
++--------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
