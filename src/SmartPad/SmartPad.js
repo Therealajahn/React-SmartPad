@@ -4,11 +4,18 @@ import useInputFilter from "./Hooks/useInputFilter";
 import useOutputFilter from "./Hooks/useOutputFilter";
 import useSmartPadInputs from "./Hooks/useSmartPadInputs";
 import useSmartPadLights from "./Hooks/useSmartPadLights";
-import SmartPadModel from "./SmartPadModel";
+import useSmartPadModel from "./Hooks/useSmartPadModel";
 
 const SmartPad = (props) => {
   const sendMIDIMessage = props.sendMIDIMessage;
   const getSequence = props.getSequence + 1;
+
+  /////////////////SMART PAD MODEL
+  const [getButtonColor, setButtonColor] = useState([]);
+  //[trigger, col, row, color]
+
+  const [smartPadHTML] = useSmartPadModel([getButtonColor]);
+  console.log(`smartPadHTML`, smartPadHTML);
 
   /////////////////SMART PAD LIGHTS
   const [sendLightCoordinates] = useSmartPadLights({
@@ -32,8 +39,6 @@ const SmartPad = (props) => {
     return "normal";
   }
   ////////////////OUTPUT FILTER
-  const [getButtonColor, setButtonColor] = useState([]);
-  //[trigger, col, row, color]
 
   useOutputFilter({
     changeMode: changeMode,
@@ -69,11 +74,7 @@ const SmartPad = (props) => {
     console.log("get encoders out");
   }
 
-  return (
-    <div>
-      <SmartPadModel getButtonColor={getButtonColor} />
-    </div>
-  );
+  return <div></div>;
 };
 
 export default SmartPad;

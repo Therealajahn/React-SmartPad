@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 
-function SmartPadModel(props) {
+const useSmartPadModel = (send) => {
+  const [getButtonColor] = send;
   const bezelWidth = 2;
   const centerWidth = 17;
 
@@ -33,23 +34,54 @@ function SmartPadModel(props) {
   //////////BUTTON
   const buttonWidth = bedWidth / 8 - 0.2;
   const buttonRadius = 0.2;
+  const [getButtons, setButtons] = useState({ trigger: true });
 
-  // const buttonStyle = {
-  //   width: `${buttonWidth}em`,
-  //   height: `${buttonWidth}em`,
-  //   backgroundColor: "#adaaaa",
-  //   borderRadius: `${buttonRadius}em`,
-  //   placeSelf: "center",
-  // };
+  const buttonBed = useRef();
+
+  // useEffect(() => {
+  //   function renderButtons() {
+  //     let buttonColor;
+  //     for (let row in getPadStore) {
+  //       getPadStore[row].forEach((button, col) => {
+  //         const buttonStyle = {
+  //           width: `${buttonWidth}em`,
+  //           height: `${buttonWidth}em`,
+  //           backgroundColor: "#adaaaa",
+  //           borderRadius: `${buttonRadius}em`,
+  //           placeSelf: "center",
+  //         };
+  //         const { trigger } = button;
+
+  //         if (!trigger) {
+  //           buttonColor = "#adaaaa";
+  //         } else {
+  //           buttonColor = "white";
+  //         }
+
+  //         const x = `x${col}`;
+  //         const y = `y${row}`;
+  //         // console.log(`x, y`, x, y);
+  //         return (
+  //           <div
+  //             class={`button x${x} y${y}`}
+  //             style={buttonStyle}
+  //             ref={button}
+  //           ></div>
+  //         );
+  //       });
+  //     }
+  //   }
+  //   // renderButtons();
+  // }, [getButtons]);
 
   {
     /* <div class="button" style={buttonStyle} ref={button}></div> */
   }
 
   //////////BUTTON MULTIPLIER
-  // const buttonBed = useRef();
 
   // useEffect(() => {
+  //   console.log(`buttonBed`, buttonBed.current);
   //   for (let y = 1; y <= 8; y++) {
   //     for (let x = 1; x <= 8; x++) {
   //       const button = document.createElement("div");
@@ -65,14 +97,14 @@ function SmartPadModel(props) {
   //       buttonBed.current.appendChild(button);
   //     }
   //   }
-  // }, []);
+  // }, [buttonBed]);
 
   // const firstRun = useRef(true);
-  // ////////////CHANGE BUTTON COLOR
+  ////////////CHANGE BUTTON COLOR
 
   // useEffect(() => {
-  //   console.log(`props.getButtonColor`, props.getButtonColor);
-  //   props.getButtonColor.forEach((button) => {
+  //   console.log(`getButtonColor`, getButtonColor);
+  //   getButtonColor.forEach((button) => {
   //     console.log(`pad model button`, button);
   //     const [trigger, col, row, color] = button;
   //     let buttonColor = "";
@@ -103,7 +135,7 @@ function SmartPadModel(props) {
   //       firstRun.current = false;
   //     }
   //   });
-  // }, [props.getButtonColor]);
+  // }, [getButtonColor]);
 
   //////////KNOB GRID
   const knobGridWidth = bedWidth;
@@ -154,7 +186,7 @@ function SmartPadModel(props) {
     placeSelf: "center",
   };
 
-  return (
+  return [
     <div className="SmartPadModel" style={{ placeSelf: "center" }}>
       <div class="base" style={baseStyle}>
         <div class="button-bed" style={bedStyle} ref={buttonBed}></div>
@@ -179,8 +211,8 @@ function SmartPadModel(props) {
           <div class="mode-button" style={modeStyle}></div>
         </div>
       </div>
-    </div>
-  );
-}
+    </div>,
+  ];
+};
 
-export default SmartPadModel;
+export default useSmartPadModel;
