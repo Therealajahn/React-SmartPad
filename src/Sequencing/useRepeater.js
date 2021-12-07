@@ -1,37 +1,31 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const useRepeater = (send) => {
-  const { sendMIDIMessage } = send;
+const useRepeater = (sendMIDIMessage, getMIDIMessage, returnStep) => {
   useEffect(() => {
-    //code that starts a sequencer
-    let currentTime = 1;
-    let step = 0;
+    startBeatLoop(returnStep);
+  }, []);
+
+  const currentTime = useRef(1);
+  const step = useRef(0);
+
+  function startBeatLoop(returnStep) {
     function time(timestamp) {
       //detect if the step number has changed
       const stepRaw = Math.floor(timestamp / 1000);
-      if (stepRaw !== currentTime) {
-        currentTime += 1;
+      if (stepRaw !== currentTime.current) {
+        currentTime.current += 1;
       }
-      if (currentTime % 10 === 0) {
-        //TODO: redo so that each beat is determined with bpm,
-        //meaning it counts each tick and makes a beat
-        //which will make it possible for future interpolation between rythms
-        triggerStep();
+      if (currentTime.current % 10 === 0) {
+        step.current = (step.current + 1) % 8;
+        returnStep(step.current);
       }
 
-      function triggerStep() {
-        // console.log(step);
-        const rythm = [1, 0, 1, 1, 1, 0, 1, 0];
-
-        if (rythm[step % 8]) {
-          sendMIDIMessage(1, [144, 0, 127]);
-        }
-        step += 1;
-      }
       requestAnimationFrame(time);
     }
     requestAnimationFrame(time);
-  }, []);
+  }
+
+  return step.current;
 };
 
 export default useRepeater;

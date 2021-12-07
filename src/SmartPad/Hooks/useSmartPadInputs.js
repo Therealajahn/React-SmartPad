@@ -1,8 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const useSmartPadInputs = (send) => {
-  const { getMIDIMessage } = send;
-
+const useSmartPadInputs = (
+  getMIDIMessage,
+  buttonPressed,
+  modeButtonPressed,
+  encoderTurned
+) => {
   const getButtonCoordinates = useRef((buttonType, buttonNumber) => {
     let padY = 0;
     let xMin = 0;
@@ -43,12 +46,12 @@ const useSmartPadInputs = (send) => {
       isOn = false;
     }
 
-    send.buttons(isOn, { padX: padX, padY: padY });
+    buttonPressed(isOn, { padX: padX, padY: padY });
   });
 
   const getModeButton = useRef((modeButton) => {
     //convert the modeButton number to 1-8 range
-    send.modeButtons(modeButton - 111);
+    modeButtonPressed(modeButton - 111);
   });
 
   const encoderBuffer = useRef(0);
@@ -63,7 +66,7 @@ const useSmartPadInputs = (send) => {
       encoderBuffer.current = encoderCC;
       direction = "down";
     }
-    return { id: encoderNumber, cc: encoderCC };
+    encoderTurned(encoderNumber, encoderCC);
   });
 
   useEffect(() => {

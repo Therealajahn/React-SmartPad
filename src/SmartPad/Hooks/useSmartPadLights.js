@@ -1,8 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const useSmartPadLights = (send) => {
-  const { sendMIDIMessage } = send;
-
+const useSmartPadLights = (sendMIDIMessage) => {
   function sendLightCoordinates(trigger, col, row, color) {
     let lightSwitch = 144;
     //144 for on 128 for off
