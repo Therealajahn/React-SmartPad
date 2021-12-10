@@ -100,7 +100,7 @@ const useSmartPadModel = (getPadStore) => {
   const buttonList = useRef([]);
 
   useStoreOnButtons(getPadStore, (trigger, col, row, color) => {
-    console.log("button placed");
+    // console.log("button placed");
     buttonList.current.push(<div class="button" style={buttonStyle}></div>);
     if (col === 8 && row === 8) {
       setButtonList(buttonList.current);

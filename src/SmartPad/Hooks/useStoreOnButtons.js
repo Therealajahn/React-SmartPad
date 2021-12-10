@@ -7,12 +7,21 @@ const useStoreOnButtons = (getPadStore, callback) => {
       for (let row in getPadStore) {
         getPadStore[row].forEach((button, col) => {
           col += 1;
+          // console.log("applyStoreToPad input:", button, col);
           if (button.trigger) {
             row = Number(row);
-            console.log(`button on at ${col},${row}`);
+            // console.log(`button on at ${col},${row}`);
             callback("on", col, row, "white");
-          } else if (!button.trigger) {
+          }
+          if (!button.trigger && !button.playhead) {
             callback("off", col, row, "white");
+          }
+          if (button.playhead) {
+            row = Number(row);
+            // console.log(`playhead on at ${col},${row}`);
+            callback("on", col, row, "red");
+          } else if (!button.playhead) {
+            callback("off", col, row, "red");
           }
         });
       }
