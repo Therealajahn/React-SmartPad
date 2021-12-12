@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const useStoreOnButtons = (getPadStore, callback) => {
+const useStoreOnButtons = (getPadStore, update, cleanup) => {
   useEffect(() => {
     // console.log("return store:", getPadStore);
     function applyStoreToPad() {
@@ -11,22 +11,25 @@ const useStoreOnButtons = (getPadStore, callback) => {
           if (button.trigger) {
             row = Number(row);
             // console.log(`button on at ${col},${row}`);
-            callback("on", col, row, "white");
+            update("on", col, row, "white");
           }
           if (!button.trigger && !button.playhead) {
-            callback("off", col, row, "white");
+            update("off", col, row, "white");
           }
           if (button.playhead) {
             row = Number(row);
             // console.log(`playhead on at ${col},${row}`);
-            callback("on", col, row, "red");
-          } else if (!button.playhead) {
-            callback("off", col, row, "red");
+            update("on", col, row, "red");
           }
         });
       }
     }
     applyStoreToPad();
+    return () => {
+      if (cleanup) {
+        cleanup();
+      }
+    };
   }, [getPadStore]);
 };
 

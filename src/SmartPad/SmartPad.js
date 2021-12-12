@@ -3,7 +3,7 @@ import usePadStore from "./Hooks/usePadStore";
 import useStoreOnButtons from "./Hooks/useStoreOnButtons";
 import useSmartPadInputs from "./Hooks/useSmartPadInputs";
 import useSmartPadLights from "./Hooks/useSmartPadLights";
-import useSmartPadModel from "./Hooks/useSmartPadModel";
+import SmartPadModel from "./SmartPadModel";
 import useInputOnStore from "./Hooks/useInputOnStore";
 import useRepeater from "../Sequencing/useRepeater";
 import usePlayhead from "./Hooks/usePlayhead";
@@ -12,7 +12,7 @@ const SmartPad = (props) => {
   const { sendMIDIMessage, getMIDIMessage, getMIDIInputs, getMIDIOutputs } =
     props;
 
-  ///////////////UPDATE PAD STORE
+  /////////////////UPDATE PAD STORE
 
   const [getPadStore, setPadStore, updateButton, updateManyButtons] =
     usePadStore();
@@ -34,32 +34,25 @@ const SmartPad = (props) => {
     // encoderTurned
   );
 
-  /////////////////SMART PAD MODEL
-
-  const smartPadElements = useSmartPadModel(getPadStore);
-
   /////////////////SMART PAD LIGHTS
 
   const [sendLightCoordinates] = useSmartPadLights(sendMIDIMessage);
+
   /////////////////PLAYHEAD
 
-  const [setPlayhead, sendPlayheadArray] = usePlayhead(updateButton);
+  const [sendPlayheadArray] = usePlayhead(updateManyButtons);
 
-  //////////////REPEATER
-  //this will live here until I have multiple instruments, when I
-  //make a dedicated Sequencer component to keep time between all the instruments
-  //although each instrument will have the option to be timed independently(based on the same timer)
-  const [getStep, setStep] = useState(0);
+  /////////////////REPEATER
 
   useRepeater(sendMIDIMessage, getMIDIMessage, sendPlayheadArray);
 
-  ////////////////WRITE STORE TO BUTTONS
+  /////////////////WRITE STORE TO BUTTONS
 
   useStoreOnButtons(getPadStore, sendLightCoordinates);
 
   return (
     <div className="SmartPadModel" style={{ placeSelf: "center" }}>
-      {smartPadElements}
+      <SmartPadModel getPadStore={getPadStore} updateButton={updateButton} />
     </div>
   );
 };

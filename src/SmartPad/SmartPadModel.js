@@ -1,7 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
-import useStoreOnButtons from "./useStoreOnButtons";
+import useStoreOnButtons from "./Hooks/useStoreOnButtons";
 
-const useSmartPadModel = (getPadStore) => {
+function SmartPadModel(props) {
+  const { getPadStore, updateButton } = props;
+
   const bezelWidth = 2;
   const centerWidth = 17;
 
@@ -25,7 +27,7 @@ const useSmartPadModel = (getPadStore) => {
     width: `${bedWidth}em`,
     height: `${bedWidth}em`,
     borderRadius: `${bedRadius}em`,
-    backgroundColor: "#fff",
+    backgroundColor: "#d1d1d1",
     display: "grid",
     gridTemplateRows: "repeat(8, 1fr)",
     gridTemplateColumns: "repeat(8, 1fr)",
@@ -83,34 +85,61 @@ const useSmartPadModel = (getPadStore) => {
   //////////BUTTON
   const buttonWidth = bedWidth / 8 - 0.2;
   const buttonRadius = 0.2;
-  const [getButtons, setButtons] = useState({ trigger: true });
 
-  const buttonStyle = {
-    width: `${buttonWidth}em`,
-    height: `${buttonWidth}em`,
-    backgroundColor: "#adaaaa",
-    borderRadius: `${buttonRadius}em`,
-    placeSelf: "center",
-  };
-  /* <div class="button" style={buttonStyle} ref={button}></div> */
-  // make a function that renders the buttons as divs according to the properties defined by their respective
+  const [getButtonList, setButtonList] = useState([]);
 
-  const [getButtonList, setButtonList] = useState();
+  useStoreOnButtons(
+    getPadStore,
+    (trigger, col, row, color) => {
+      // console.log(
+      //   "useStoreOnButtons in SmartPadModel",
+      //   trigger,
+      //   col,
+      //   row,
+      //   color
+      // );
 
-  const buttonList = useRef([]);
+      let buttonColor = "#adaaaa";
+      if (trigger === "on") {
+        buttonColor = color;
+      } else if (trigger === "off") {
+        buttonColor = "#adaaaa";
+      }
 
-  useStoreOnButtons(getPadStore, (trigger, col, row, color) => {
-    // console.log("button placed");
-    buttonList.current.push(<div class="button" style={buttonStyle}></div>);
-    if (col === 8 && row === 8) {
-      setButtonList(buttonList.current);
+      const buttonStyle = {
+        width: `${buttonWidth}em`,
+        height: `${buttonWidth}em`,
+        borderRadius: `${buttonRadius}em`,
+        placeSelf: "center",
+        backgroundColor: buttonColor,
+        gridColumnStart: col,
+        gridRowStart: row,
+      };
+      setButtonList((prevButtonList) => [
+        ...prevButtonList,
+        <div
+          class="button"
+          style={buttonStyle}
+          onClick={() => {
+            buttonClicked(col, row);
+          }}
+        ></div>,
+      ]);
+    },
+    () => {
+      getButtonList.current = [];
     }
-  });
+  );
+
+  function buttonClicked(col, row) {
+    // console.log("buttonClicked", col, row);
+    updateButton(col, row, "trigger", "toggle");
+  }
 
   return (
     <div class="base" style={baseStyle}>
       <div class="button-bed" style={bedStyle}>
-        {getButtonList}
+        {getButtonList.map((button) => button)}
       </div>
       <div class="knob-grid" style={knobGridStyle}>
         <div class="knob" style={knobStyle}></div>
@@ -134,6 +163,6 @@ const useSmartPadModel = (getPadStore) => {
       </div>
     </div>
   );
-};
+}
 
-export default useSmartPadModel;
+export default SmartPadModel;

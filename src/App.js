@@ -5,8 +5,10 @@ import useMIDIAccess from "./MIDI/useMIDIAccess";
 import usePureData from "./MIDI/usePuredata";
 
 function App() {
-  console.log("render");
+  // console.log("render");
+
   ////////////////MIDI STATE
+
   const [getMIDIInputs, setMIDIInputs] = useState([
     { name: "", type: "", state: "" },
   ]);
@@ -19,7 +21,9 @@ function App() {
     device: { name: "", type: "", state: "" },
     message: [0, 0, 0],
   });
+
   /////////////MIDI Access
+  //
   const [sendMIDIMessage] = useMIDIAccess({
     messages: getMIDIMessagesOut,
     inputs: getInputsOut,

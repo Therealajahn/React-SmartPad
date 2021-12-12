@@ -101,7 +101,7 @@ const usePadStore = () => {
   function updateManyButtons(buttonsToUpdate) {
     setPadStore((prevState) => {
       buttonsToUpdate.forEach((update) => {
-        console.log("updateManyButtons", update);
+        // console.log("updateManyButtons", update);
         const [col, row, propertyToUpdate, value] = update;
         if (value === "toggle") {
           // console.log("valuetoggle");

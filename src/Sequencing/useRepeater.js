@@ -7,6 +7,7 @@ const useRepeater = (sendMIDIMessage, getMIDIMessage, advance) => {
 
   const currentTime = useRef(1);
   const step = useRef(0);
+  const step2 = useRef(0);
 
   function startBeatLoop() {
     function time(timestamp) {
@@ -15,12 +16,18 @@ const useRepeater = (sendMIDIMessage, getMIDIMessage, advance) => {
       if (stepRaw !== currentTime.current) {
         currentTime.current += 1;
       }
-      if (currentTime.current % 10 === 0) {
+      if (currentTime.current % 50 === 0) {
         step.current = (step.current % 8) + 1;
 
-        console.log(`step.current`, step.current);
-        advance(step.current);
+        // console.log(`step.current`, step.current);
+        advance(step.current, 1, 6);
       }
+      // if (currentTime.current % 100 === 0) {
+      //   step2.current = (step2.current % 8) + 1;
+
+      //   console.log(`step2.current`, step2.current);
+      //   advance(step2.current, 7, 8);
+      // }
 
       requestAnimationFrame(time);
     }
