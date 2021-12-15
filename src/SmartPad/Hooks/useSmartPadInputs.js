@@ -6,7 +6,7 @@ const useSmartPadInputs = (
   modeButtonPressed,
   encoderTurned
 ) => {
-  const getButtonCoordinates = useRef((buttonType, buttonNumber) => {
+  function getButtonCoordinates(buttonType, buttonNumber) {
     let padY = 0;
     let xMin = 0;
 
@@ -47,31 +47,32 @@ const useSmartPadInputs = (
     }
 
     buttonPressed(isOn, { padX: padX, padY: padY });
-  });
+  }
 
-  const getModeButton = useRef((modeButton) => {
+  function getModeButton(modeButton) {
     //convert the modeButton number to 1-8 range
     modeButtonPressed(modeButton - 111);
-  });
+  }
 
   const encoderBuffer = useRef(0);
 
-  const encoderHandler = useRef((encoderNumber, encoderCC) => {
-    let direction = "";
+  function encoderHandler(encoderNumber, encoderCC) {
+    let encoderDirection = "";
     if (encoderCC > encoderBuffer.current) {
       encoderBuffer.current = encoderCC;
-      direction = "up";
+      encoderDirection = "up";
     }
     if (encoderCC < encoderBuffer.current) {
       encoderBuffer.current = encoderCC;
-      direction = "down";
+      encoderDirection = "down";
     }
-    encoderTurned(encoderNumber, encoderCC);
-  });
+    encoderTurned(encoderNumber, encoderCC, encoderDirection);
+  }
 
   useEffect(() => {
     // console.log(getMIDIMessage.device.name, getMIDIMessage.message);
     if (getMIDIMessage.device.name === "SmartPAD MIDI 1") {
+      //should not run if SmartPad not detected
       routeInput();
     }
   }, [getMIDIMessage]);
@@ -81,13 +82,13 @@ const useSmartPadInputs = (
       //PAD BUTTONS SEND:[(144:on 128:off),(*see reference),((0:on 127:off))]
       switch (getMIDIMessage.message[0]) {
         case 144:
-          getButtonCoordinates.current(
+          getButtonCoordinates(
             getMIDIMessage.message[0],
             getMIDIMessage.message[1]
           );
           break;
         case 128:
-          getButtonCoordinates.current(
+          getButtonCoordinates(
             getMIDIMessage.message[0],
             getMIDIMessage.message[1]
           );
@@ -95,17 +96,14 @@ const useSmartPadInputs = (
 
         //MODE BUTTONS SEND: [(159:on 143:off),(112-119),(0:on 127:off)]
         case 159:
-          getModeButton.current(getMIDIMessage.message[1]);
+          getModeButton(getMIDIMessage.message[1]);
           break;
         case 143:
-          getModeButton.current(getMIDIMessage.message[1]);
+          getModeButton(getMIDIMessage.message[1]);
           break;
         //ENCODER SEND
         case 176:
-          encoderHandler.current(
-            getMIDIMessage.message[1],
-            getMIDIMessage.message[2]
-          );
+          encoderHandler(getMIDIMessage.message[1], getMIDIMessage.message[2]);
           break;
       }
       // sendMIDIMessage(1, getMIDIMessage.message);

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const useSmartPadLights = (sendMIDIMessage) => {
+const useSmartPadLights = (sendMIDIMessage, getMIDIOutputs) => {
   function sendLightCoordinates(trigger, col, row, color) {
     let lightSwitch = 144;
     //144 for on 128 for off
@@ -46,7 +46,19 @@ const useSmartPadLights = (sendMIDIMessage) => {
 
     // console.log("lights args", arguments);
 
-    sendMIDIMessage(2, [lightSwitch, buttonId, lightColor]);
+    // console.log(`getMIDIOutputs from useSmartPadLights`, getMIDIOutputs);
+    let smartPad = null;
+
+    getMIDIOutputs.forEach((output, index) => {
+      if (output.name === "SmartPAD MIDI 1") {
+        // console.log("output match", index);
+        smartPad = index;
+      }
+    });
+
+    // console.log(`smartPad from useSmartPadLights`, smartPad);
+
+    sendMIDIMessage(smartPad, [lightSwitch, buttonId, lightColor]);
   }
   return [sendLightCoordinates];
 };

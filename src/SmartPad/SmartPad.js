@@ -29,14 +29,27 @@ const SmartPad = (props) => {
 
   useSmartPadInputs(
     getMIDIMessage,
-    buttonPressed
-    // modeButtonPressed,
-    // encoderTurned
+    buttonPressed,
+    modeButtonPressed,
+    encoderTurned
   );
+
+  //placeholder functions until I add these to a hook
+  function modeButtonPressed(modeButton) {
+    console.log(`modeButton`, modeButton);
+  }
+  function encoderTurned(encoderNumber, encoderCC, encoderDirection) {
+    console.log(`encoderNumber`, encoderNumber);
+    console.log(`encoderCC`, encoderCC);
+    console.log(`encoderDirection`, encoderDirection);
+  }
 
   /////////////////SMART PAD LIGHTS
 
-  const [sendLightCoordinates] = useSmartPadLights(sendMIDIMessage);
+  const [sendLightCoordinates] = useSmartPadLights(
+    sendMIDIMessage,
+    getMIDIOutputs
+  );
 
   /////////////////PLAYHEAD
 

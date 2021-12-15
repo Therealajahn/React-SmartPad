@@ -9,6 +9,7 @@ const useMIDIAccess = (send) => {
     });
     accessMIDIOutputs().then((outputs) => {
       send.outputs(outputs);
+      console.log(`outputs`, outputs);
     });
     return () => {
       removeMIDIListeners();

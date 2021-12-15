@@ -18,7 +18,9 @@ function SmartPadModel(props) {
     borderRight: `${bezelWidth}em solid #757575`,
     placeItems: "center",
   };
+
   //////////BED
+
   const bedWidth = 14;
   const bedRadius = 0.2;
 
@@ -34,6 +36,7 @@ function SmartPadModel(props) {
   };
 
   //////////KNOB GRID
+
   const knobGridWidth = bedWidth;
   //find the space in between the bezel and the button bed
   const knobGridHeight = (centerWidth - bedWidth) / 2;
@@ -48,6 +51,7 @@ function SmartPadModel(props) {
   };
 
   //////////KNOB
+
   const knobDiameter = knobGridHeight - 0.2;
 
   const knobStyle = {
@@ -71,6 +75,7 @@ function SmartPadModel(props) {
     justifySelf: "end",
     gridTemplateRows: "repeat(8, 1fr)",
   };
+
   //////////MODE BUTTON
   const modeDiameter = modeGridWidth - 0.6;
 
