@@ -9,7 +9,6 @@ const useMIDIAccess = (send) => {
     });
     accessMIDIOutputs().then((outputs) => {
       send.outputs(outputs);
-      console.log(`outputs`, outputs);
     });
     return () => {
       removeMIDIListeners();
@@ -70,14 +69,14 @@ const useMIDIAccess = (send) => {
 
   ////////////////PUBLIC
 
-  function sendMIDIMessage(outputNumber, message) {
+  function sendMIDIMessage(outputName, message) {
     requestMIDI.current.then((access) => {
-      let array = [];
       for (const output of access.outputs) {
-        array.push(output);
-      }
-      if (array[outputNumber]) {
-        array[outputNumber][1].send(message);
+        // console.log(`output from sendMIDIMessage`, output);
+        if (output[1].name === outputName) {
+          // console.log("output match", output[1].name);
+          output[1].send(message);
+        }
       }
     });
   }

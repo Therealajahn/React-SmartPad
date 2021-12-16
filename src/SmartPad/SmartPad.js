@@ -34,7 +34,7 @@ const SmartPad = (props) => {
     encoderTurned
   );
 
-  //placeholder functions until I add these to a hook
+  //placeholder functions until I add these to useInputOnStore
   function modeButtonPressed(modeButton) {
     console.log(`modeButton`, modeButton);
   }

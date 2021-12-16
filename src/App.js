@@ -23,7 +23,7 @@ function App() {
   });
 
   /////////////MIDI Access
-  //
+
   const [sendMIDIMessage] = useMIDIAccess({
     messages: getMIDIMessagesOut,
     inputs: getInputsOut,

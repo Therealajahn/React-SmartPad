@@ -47,18 +47,10 @@ const useSmartPadLights = (sendMIDIMessage, getMIDIOutputs) => {
     // console.log("lights args", arguments);
 
     // console.log(`getMIDIOutputs from useSmartPadLights`, getMIDIOutputs);
-    let smartPad = null;
-
-    getMIDIOutputs.forEach((output, index) => {
-      if (output.name === "SmartPAD MIDI 1") {
-        // console.log("output match", index);
-        smartPad = index;
-      }
-    });
 
     // console.log(`smartPad from useSmartPadLights`, smartPad);
 
-    sendMIDIMessage(smartPad, [lightSwitch, buttonId, lightColor]);
+    sendMIDIMessage("SmartPAD MIDI 1", [lightSwitch, buttonId, lightColor]);
   }
   return [sendLightCoordinates];
 };
