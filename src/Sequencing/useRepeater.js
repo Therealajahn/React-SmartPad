@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const useRepeater = (sendMIDIMessage, getMIDIMessage, advance) => {
+const useRepeater = (sendMIDIMessage, getMIDIMessage, sendPlayheadArray) => {
   useEffect(() => {
     startBeatLoop();
   }, []);
@@ -20,16 +20,29 @@ const useRepeater = (sendMIDIMessage, getMIDIMessage, advance) => {
     tick.current += 1;
     // console.log(`tick`, tick);
 
-    if (tick.current % 60 === 0) {
+    if (tick.current % 30 === 0) {
       step.current = (step.current % 8) + 1;
       // console.log(`step`, step.current);
-      part(step.current);
-      advance(step.current, 1, 6);
+      volcaDrum(step.current, sendMIDIMessage, getMIDIMessage);
+      sendPlayheadArray(step.current, 1, 6);
     }
   }
 
-  function part() {
-    sendMIDIMessage("USB Midi MIDI 1", [144, 0, 127]);
+  function volcaDrum(step, sendMIDIMessage, getMIDIMessage) {
+    function partOne() {
+      let rhythm = [1, 0, 1, 0, 1, 0, 1, 0];
+      if (rhythm[step - 1]) {
+        sendMIDIMessage("USB Midi MIDI 1", [144, 0, 127]);
+      }
+    }
+    function partTwo() {
+      let rhythm = [0, 1, 0, 1, 0, 1, 0, 1];
+      if (rhythm[step - 1]) {
+        sendMIDIMessage("USB Midi MIDI 1", [145, 0, 127]);
+      }
+    }
+    partOne();
+    partTwo();
   }
 };
 export default useRepeater;

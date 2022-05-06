@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React from "react";
 import usePadStore from "./Hooks/usePadStore";
 import useStoreOnButtons from "./Hooks/useStoreOnButtons";
 import useSmartPadInputs from "./Hooks/useSmartPadInputs";
@@ -55,7 +55,7 @@ const SmartPad = (props) => {
 
   const [sendPlayheadArray] = usePlayhead(updateManyButtons);
 
-  /////////////////REPEATER
+  /////////////////SEQUENCING
 
   useRepeater(sendMIDIMessage, getMIDIMessage, sendPlayheadArray);
 
