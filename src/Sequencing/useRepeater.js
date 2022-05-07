@@ -1,6 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
 
-const useRepeater = (sendMIDIMessage, getMIDIMessage, sendPlayheadArray) => {
+const useRepeater = (
+  sendMIDIMessage,
+  getMIDIMessage,
+  sendPlayheadArray,
+  getPadStore
+) => {
   useEffect(() => {
     startBeatLoop();
   }, []);
@@ -30,8 +35,10 @@ const useRepeater = (sendMIDIMessage, getMIDIMessage, sendPlayheadArray) => {
 
   function volcaDrum(step, sendMIDIMessage, getMIDIMessage) {
     function partOne() {
-      let rhythm = [1, 0, 1, 0, 1, 0, 1, 0];
-      if (rhythm[step - 1]) {
+      console.log(getPadStore);
+      let currentStep = getPadStore["1"][step - 1];
+
+      if (currentStep.trigger && currentStep.playhead) {
         sendMIDIMessage("USB Midi MIDI 1", [144, 0, 127]);
       }
     }

@@ -86,6 +86,8 @@ const usePadStore = () => {
 
   function updateButton(col, row, propertyToUpdate, value) {
     // console.log("updateButton", col, row, propertyToUpdate, value);
+    console.log("padStore", getPadStore);
+
     setPadStore((prevState) => {
       if (value === "toggle") {
         // console.log("valuetoggle");

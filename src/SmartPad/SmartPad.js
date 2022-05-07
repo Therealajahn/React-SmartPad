@@ -57,7 +57,7 @@ const SmartPad = (props) => {
 
   /////////////////SEQUENCING
 
-  useRepeater(sendMIDIMessage, getMIDIMessage, sendPlayheadArray);
+  useRepeater(sendMIDIMessage, getMIDIMessage, sendPlayheadArray, getPadStore);
 
   /////////////////WRITE STORE TO BUTTONS
 
